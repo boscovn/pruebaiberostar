@@ -32,7 +32,7 @@ class SuperheroeTest {
     void setName() {
         Superheroe superheroe = new Superheroe();
         String name = "TestName";
-        superheroe.setName("name");
+        superheroe.setName(name);
         assertEquals(name, superheroe.getName());
     }
 }
