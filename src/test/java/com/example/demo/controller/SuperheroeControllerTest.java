@@ -12,14 +12,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-
 import java.util.*;
 
+
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(SuperheroeController.class)
 class SuperheroeControllerTest {
@@ -31,10 +33,11 @@ class SuperheroeControllerTest {
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
+
     @Test
     void shouldReturnSuperheroe() throws Exception {
         long id = 1L;
-        Superheroe superheroe = new Superheroe( id,"NombreDeEste");
+        Superheroe superheroe = new Superheroe(id, "NombreDeEste");
         when(superheroeRepository.findById(id)).thenReturn(Optional.of(superheroe));
         mockMvc.perform(get("/api/superheroes/{id}", id)).andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
@@ -97,6 +100,7 @@ class SuperheroeControllerTest {
                 .andExpect(status().isNoContent())
                 .andDo(print());
     }
+
     @Test
     void shouldCreateSuperheroe() throws Exception {
         Superheroe superheroe = new Superheroe(1L, "Un superheroe");
@@ -104,6 +108,48 @@ class SuperheroeControllerTest {
         mockMvc.perform(post("/api/superheroes").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(superheroe)))
                 .andExpect(status().isCreated())
+                .andDo(print());
+    }
+
+    @Test
+    void shouldUpdateSuperheroe() throws Exception {
+        long id = 1L;
+
+        Superheroe superheroe = new Superheroe(id, "Original");
+        Superheroe updatedsuperheroe = new Superheroe(id, "Updated");
+
+        when(superheroeRepository.findById(id)).thenReturn(Optional.of(superheroe));
+        when(superheroeRepository.save(any(Superheroe.class))).thenReturn(updatedsuperheroe);
+
+        mockMvc.perform(put("/api/superheroes/{id}", id).contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatedsuperheroe)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value(updatedsuperheroe.getName()))
+                .andDo(print());
+    }
+
+    @Test
+    void shouldReturnNotFoundUpdateSuperheroe() throws Exception {
+        long id = 1L;
+
+        Superheroe updatedsuperheroe = new Superheroe(id, "Updated");
+
+        when(superheroeRepository.findById(id)).thenReturn(Optional.empty());
+        when(superheroeRepository.save(any(Superheroe.class))).thenReturn(updatedsuperheroe);
+
+        mockMvc.perform(put("/api/superheroes/{id}", id).contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updatedsuperheroe)))
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    void shouldDeleteSuperheroe() throws Exception {
+        long id = 1L;
+
+        doNothing().when(superheroeRepository).deleteById(id);
+        mockMvc.perform(delete("/api/superheroes/{id}", id))
+                .andExpect(status().isNoContent())
                 .andDo(print());
     }
 

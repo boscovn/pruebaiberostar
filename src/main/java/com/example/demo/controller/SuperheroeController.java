@@ -25,6 +25,7 @@ public class SuperheroeController {
         if (superheroes.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         else return new ResponseEntity<>(superheroes, HttpStatus.OK);
     }
+
     @GetMapping("/superheroes/{id}")
     public ResponseEntity<Superheroe> getSuperheroeById(@PathVariable("id") long id) {
         Optional<Superheroe> superheroeData = superheroeRepository.findById(id);
@@ -34,5 +35,24 @@ public class SuperheroeController {
     @PostMapping("/superheroes")
     public ResponseEntity<Superheroe> createTutorial(@RequestBody Superheroe superheroe) {
         return new ResponseEntity<>(superheroeRepository.save(new Superheroe(superheroe.getName())), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/superheroes/{id}")
+    public ResponseEntity<Superheroe> updateSuperheroe(@PathVariable("id") long id, @RequestBody Superheroe superheroe) {
+        Optional<Superheroe> superheroeData = superheroeRepository.findById(id);
+
+        if (superheroeData.isPresent()) {
+            Superheroe _superheroe = superheroeData.get();
+            _superheroe.setName(superheroe.getName());
+            return new ResponseEntity<>(superheroeRepository.save(_superheroe), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/superheroes/{id}")
+    public ResponseEntity<HttpStatus> deleteSuperheroe(@PathVariable("id") long id) {
+        superheroeRepository.deleteById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

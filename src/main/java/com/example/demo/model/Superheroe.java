@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+
 @Entity
 @Table(name = "superheroes")
 public class Superheroe {

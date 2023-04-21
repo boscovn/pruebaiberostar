@@ -1,21 +1,20 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.Superheroe;
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-@DataJpaTest
+import static org.assertj.core.api.Assertions.assertThat;
 
+@DataJpaTest
 class SuperheroeRepositoryTest {
 
     @Autowired
-    private TestEntityManager entityManager;
-
-    @Autowired
     SuperheroeRepository repository;
+    @Autowired
+    private TestEntityManager entityManager;
 
     @Test
     public void should_store_a_superheroe() {
@@ -41,7 +40,7 @@ class SuperheroeRepositoryTest {
 
     @Test
     public void should_find_superheroe_by_id() {
-        Superheroe sup1 = new Superheroe( "Name#1");
+        Superheroe sup1 = new Superheroe("Name#1");
         entityManager.persist(sup1);
 
         Superheroe sup2 = new Superheroe("Name#2");
@@ -60,7 +59,7 @@ class SuperheroeRepositoryTest {
         Superheroe sup2 = new Superheroe("Calico Electronico");
         entityManager.persist(sup2);
 
-        Superheroe sup3 = new Superheroe( "Batman");
+        Superheroe sup3 = new Superheroe("Batman");
         entityManager.persist(sup3);
 
         Iterable<Superheroe> superheroes = repository.findByNameContaining("man");
