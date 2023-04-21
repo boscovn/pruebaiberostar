@@ -2,10 +2,12 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Superheroe;
 import com.example.demo.repository.SuperheroeRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -27,6 +29,8 @@ class SuperheroeControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
     @Test
     void shouldReturnSuperheroe() throws Exception {
         long id = 1L;
@@ -91,6 +95,15 @@ class SuperheroeControllerTest {
         when(superheroeRepository.findByNameContaining(searchString)).thenReturn(superheroes);
         mockMvc.perform(get("/api/superheroes").params(paramsMap))
                 .andExpect(status().isNoContent())
+                .andDo(print());
+    }
+    @Test
+    void shouldCreateSuperheroe() throws Exception {
+        Superheroe superheroe = new Superheroe(1L, "Un superheroe");
+
+        mockMvc.perform(post("/api/superheroes").contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(superheroe)))
+                .andExpect(status().isCreated())
                 .andDo(print());
     }
 

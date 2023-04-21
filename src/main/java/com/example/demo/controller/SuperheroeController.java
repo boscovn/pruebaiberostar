@@ -30,4 +30,9 @@ public class SuperheroeController {
         Optional<Superheroe> superheroeData = superheroeRepository.findById(id);
         return superheroeData.map(superheroe -> new ResponseEntity<>(superheroe, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+
+    @PostMapping("/superheroes")
+    public ResponseEntity<Superheroe> createTutorial(@RequestBody Superheroe superheroe) {
+        return new ResponseEntity<>(superheroeRepository.save(new Superheroe(superheroe.getName())), HttpStatus.CREATED);
+    }
 }
