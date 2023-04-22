@@ -4,6 +4,7 @@ import com.example.demo.annotations.LogExecutionTime;
 import com.example.demo.model.Superheroe;
 import com.example.demo.repository.SuperheroeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ public class SuperheroeController {
     SuperheroeRepository superheroeRepository;
 
     @GetMapping("/superheroes")
+    @Cacheable("myCache")
     @LogExecutionTime
     public ResponseEntity<List<Superheroe>> getSuperheroes(@RequestParam(required = false) String searchString) {
         List<Superheroe> superheroes = new ArrayList<Superheroe>();
@@ -29,6 +31,7 @@ public class SuperheroeController {
     }
 
     @GetMapping("/superheroes/{id}")
+    @Cacheable("myCache")
     @LogExecutionTime
     public ResponseEntity<Superheroe> getSuperheroeById(@PathVariable("id") long id) {
         Optional<Superheroe> superheroeData = superheroeRepository.findById(id);
