@@ -7,7 +7,8 @@ import jakarta.persistence.*;
 public class Superheroe {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "superheroes_seq")
+    @SequenceGenerator(name = "superheroes_seq", sequenceName = "superheroes_id_seq", allocationSize = 1)
     private Long id;
     @Column(name = "name")
     private String name;

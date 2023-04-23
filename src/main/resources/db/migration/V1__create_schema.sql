@@ -1,4 +1,11 @@
+CREATE SEQUENCE superheroes_id_seq
+  START WITH 1
+  INCREMENT BY 1
+  NO MINVALUE
+  NO MAXVALUE
+  CACHE 1;
+
 CREATE TABLE IF NOT EXISTS superheroes (
-  id INT PRIMARY KEY,
+  id INT DEFAULT nextval('superheroes_id_seq') PRIMARY KEY,
   name VARCHAR(50) NOT NULL
 );

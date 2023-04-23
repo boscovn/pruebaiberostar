@@ -59,7 +59,7 @@ public class SuperheroeController {
     }
 
     @PostMapping("/superheroes")
-    @ApiResponse(responseCode = "200", description = "Superhero we just created",
+    @ApiResponse(responseCode = "201", description = "Superhero we just created",
             content = {@Content(mediaType = "application/json", schema = @Schema(implementation = Superheroe.class))})
     @Operation(summary = "Create a superheroe")
     @LogExecutionTime
