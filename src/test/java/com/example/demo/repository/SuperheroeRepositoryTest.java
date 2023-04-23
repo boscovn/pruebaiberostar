@@ -35,7 +35,7 @@ class SuperheroeRepositoryTest {
 
         Iterable<Superheroe> superheroes = repository.findAll();
 
-        assertThat(superheroes).hasSize(3).contains(sup1, sup2, sup3);
+        assertThat(superheroes).hasSize(48).contains(sup1, sup2, sup3);
     }
 
     @Test
@@ -64,7 +64,7 @@ class SuperheroeRepositoryTest {
 
         Iterable<Superheroe> superheroes = repository.findByNameContaining("man");
 
-        assertThat(superheroes).hasSize(2).contains(sup1, sup3);
+        assertThat(superheroes).hasSize(7).contains(sup1, sup3);
     }
 
     @Test
@@ -102,6 +102,6 @@ class SuperheroeRepositoryTest {
 
         Iterable<Superheroe> superheroes = repository.findAll();
 
-        assertThat(superheroes).hasSize(2).contains(sup1, sup3);
+        assertThat(superheroes).hasSize(47).contains(sup1, sup3);
     }
 }
